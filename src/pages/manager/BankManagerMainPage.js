@@ -1,24 +1,26 @@
+import { expect } from '@playwright/test';
+
 export class BankManagerMainPage {
   constructor(page) {
     this.page = page;
-    this.addCustomerButton = page.locator('button[ng-click="addCust()"]');
-    this.openAccountButton = page.locator('button[ng-click="openAccount()"]');
-    this.customersButton = page.locator('button[ng-click="showCust()"]');
+    this.addCustomerButton = page.locator('button[ng-class="btnClass1"]');
+    this.openAccountButton = page.locator('button[ng-class="btnClass2"]');
+    this.customersButton = page.locator('button[ng-class="btnClass3"]');
   }
 
-  async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/manager');
+  async assertManagerPageIsVisible() {
+    await expect(this.addCustomerButton).toBeVisible();
   }
 
-  async goToAddCustomer() {
+  async openAddCustomerPage() {
     await this.addCustomerButton.click();
   }
 
-  async goToOpenAccount() {
+  async openOpenAccountPage() {
     await this.openAccountButton.click();
   }
 
-  async goToCustomers() {
+  async openCustomersPage() {
     await this.customersButton.click();
   }
 }

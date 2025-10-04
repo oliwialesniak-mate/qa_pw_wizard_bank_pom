@@ -7,23 +7,18 @@ export class AddCustomerPage {
     this.addCustomerBtn = page.locator('button[type="submit"]');
   }
 
-  async open() {
-    await this.page.goto(
-      'https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust'
-    );
-  }
-
   async addCustomer(firstName, lastName, postCode) {
     await this.firstNameInput.fill(firstName);
     await this.lastNameInput.fill(lastName);
     await this.postCodeInput.fill(postCode);
 
-    // Handle alert popup
+    let alertMessage;
     this.page.once('dialog', async (dialog) => {
-      console.log(`Alert message: ${dialog.message()}`);
+      alertMessage = dialog.message();
       await dialog.accept();
     });
 
     await this.addCustomerBtn.click();
+    return alertMessage;
   }
 }

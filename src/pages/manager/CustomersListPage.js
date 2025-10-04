@@ -4,35 +4,25 @@ export class CustomersListPage {
   constructor(page) {
     this.page = page;
     this.searchInput = page.locator('input[placeholder="Search Customer"]');
-    this.customerRows = page.locator('table tbody tr');
-    this.deleteButtons = page.locator('button', { hasText: 'Delete' });
+    this.customerRows = page.locator('tbody tr');
+    this.deleteButtons = page.locator('button[ng-click="deleteCust(cust)"]');
   }
 
-  async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/manager/list');
+  async searchCustomer(term) {
+    await this.searchInput.fill(term);
   }
 
-  async searchCustomer(keyword) {
-    await this.searchInput.fill(keyword);
+  async assertOnlyOneResult() {
+    await expect(this.customerRows).toHaveCount(1);
   }
 
-  async getCustomerRowData(index = 0) {
-    const row = this.customerRows.nth(index);
-    const cells = row.locator('td');
-    const firstName = await cells.nth(0).textContent();
-    const lastName = await cells.nth(1).textContent();
-    const postCode = await cells.nth(2).textContent();
-    const accountNumber = await cells.nth(3).textContent();
-    return { firstName, lastName, postCode, accountNumber };
+  async deleteFirstCustomer() {
+    await this.deleteButtons.first().click();
   }
 
-  async assertCustomerExists(firstName, lastName) {
-    await expect(this.page.locator('table')).toContainText(firstName);
-    await expect(this.page.locator('table')).toContainText(lastName);
-  }
-
-  async deleteCustomerByName(firstName) {
-    const row = this.customerRows.filter({ hasText: firstName }).first();
-    await row.locator('button', { hasText: 'Delete' }).click();
+  async getCustomerRowData() {
+    const cells = this.customerRows.first().locator('td');
+    const data = await cells.allTextContents();
+    return data.map((t) => t.trim());
   }
 }

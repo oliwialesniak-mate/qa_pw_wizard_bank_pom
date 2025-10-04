@@ -1,31 +1,22 @@
-import { expect } from '@playwright/test';
-
 export class OpenAccountPage {
   constructor(page) {
     this.page = page;
     this.customerDropdown = page.locator('#userSelect');
     this.currencyDropdown = page.locator('#currency');
-    this.processButton = page.locator('button', { hasText: 'Process' });
-  }
-
-  async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/manager/openAccount');
+    this.currencySelect = this.currencyDropdown; // alias for test compatibility
+    this.processButton = page.locator('button[type="submit"]');
   }
 
   async selectCustomer(customerName) {
     await this.customerDropdown.selectOption({ label: customerName });
   }
 
-  async selectCurrency(currencyName) {
-    await this.currencyDropdown.selectOption({ label: currencyName });
+  async selectCurrency(currency) {
+    await this.currencyDropdown.selectOption({ label: currency });
   }
 
-  async clickProcess() {
-    const [dialog] = await Promise.all([
-      this.page.waitForEvent('dialog'),
-      this.processButton.click(),
-    ]);
-    expect(dialog.message()).toContain('Account created successfully');
-    await dialog.accept();
+  async process() {
+    this.page.once('dialog', async (dialog) => await dialog.accept());
+    await this.processButton.click();
   }
 }
