@@ -1,19 +1,16 @@
-export class BankHomePage {
+import { BasePage } from '../BasePage.js';
+
+export class BankHomePage extends BasePage {
   constructor(page) {
-    this.page = page;
-    this.bankManagerLoginButton = page.getByRole('button', { name: 'Bank Manager Login' });
-    this.customerLoginButton = page.getByRole('button', { name: 'Customer Login' });
+    super(page);
+    this.managerLoginButton = page.getByRole('button', { name: 'Bank Manager Login' });
   }
 
   async open() {
-    await this.page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login');
+    await super.open('/angularJs-protractor/BankingProject/#/login');
   }
 
   async clickBankManagerLoginButton() {
-    await this.bankManagerLoginButton.click();
-  }
-
-  async clickCustomerLoginButton() {
-    await this.customerLoginButton.click();
+    await this.managerLoginButton.click();
   }
 }

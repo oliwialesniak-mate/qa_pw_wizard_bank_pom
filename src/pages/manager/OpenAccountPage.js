@@ -1,22 +1,15 @@
-import { expect } from '@playwright/test';
+import { BasePage } from '../BasePage.js';
 
-export class OpenAccountPage {
+export class OpenAccountPage extends BasePage {
   constructor(page) {
-    this.page = page;
+    super(page);
     this.customerDropdown = page.locator('#userSelect');
     this.currencyDropdown = page.locator('#currency');
+    this.currencySelect = this.currencyDropdown; // alias for compatibility
     this.processButton = page.getByRole('button', { name: 'Process' });
-
-    // alias for tests
-    this.currencySelect = this.currencyDropdown;
   }
 
-  async open() {
-    // Optional if test calls open() before interacting
-    await expect(this.customerDropdown).toBeVisible();
-  }
-
-  async selectCustomer(name) {
+  async selectCustomerByName(name) {
     await this.customerDropdown.selectOption({ label: name });
   }
 
@@ -30,7 +23,6 @@ export class OpenAccountPage {
     const dialog = await dialogPromise;
     const message = dialog.message();
     await dialog.accept();
-    expect(message).toContain('Account created successfully');
     return message;
   }
 }

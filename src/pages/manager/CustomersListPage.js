@@ -1,9 +1,10 @@
 import { expect } from '@playwright/test';
+import { BasePage } from '../BasePage.js';
 
-export class CustomersListPage {
+export class CustomersListPage extends BasePage {
   constructor(page) {
-    this.page = page;
-    this.searchInput = page.getByPlaceholder('Search Customer');
+    super(page);
+    this.searchInput = page.locator('input[placeholder="Search Customer"]');
     this.customerRows = page.locator('table tbody tr');
   }
 
@@ -15,16 +16,17 @@ export class CustomersListPage {
     await expect(this.customerRows).toHaveCount(1);
   }
 
-  async assertCustomerExists(firstName, lastName) {
-    const row = this.page.locator('table tbody tr', { hasText: firstName });
-    await expect(row).toContainText(lastName);
+  async getCustomerRowData() {
+    const cells = await this.customerRows.first().locator('td').allTextContents();
+    return cells.map((text) => text.trim());
   }
 
-  async deleteCustomerByName(firstName) {
-    const deleteButton = this.page
-      .locator('table tbody tr', { hasText: firstName })
-      .getByRole('button', { name: 'Delete' });
+  async deleteCustomerByName(name) {
+    const row = this.page.locator('table tbody tr', { hasText: name });
+    await row.getByRole('button', { name: 'Delete' }).click();
+  }
 
-    await deleteButton.click();
+  async assertCustomerExists(name) {
+    await expect(this.page.locator('table tbody tr', { hasText: name })).toBeVisible();
   }
 }

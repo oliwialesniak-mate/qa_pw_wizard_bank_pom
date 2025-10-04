@@ -1,8 +1,8 @@
-import { expect } from '@playwright/test';
+import { BasePage } from '../BasePage.js';
 
-export class AddCustomerPage {
+export class AddCustomerPage extends BasePage {
   constructor(page) {
-    this.page = page;
+    super(page);
     this.firstNameInput = page.locator('input[placeholder="First Name"]');
     this.lastNameInput = page.locator('input[placeholder="Last Name"]');
     this.postCodeInput = page.locator('input[placeholder="Post Code"]');
@@ -14,15 +14,11 @@ export class AddCustomerPage {
     await this.lastNameInput.fill(lastName);
     await this.postCodeInput.fill(postCode);
 
-    // ✅ Reliable dialog handling
     const dialogPromise = this.page.waitForEvent('dialog');
     await this.addCustomerButton.click();
-
     const dialog = await dialogPromise;
     const message = dialog.message();
     await dialog.accept();
-
-    expect(message).toContain('Customer added successfully');
     return message;
   }
 }

@@ -1,8 +1,9 @@
 import { expect } from '@playwright/test';
+import { BasePage } from '../BasePage.js';
 
-export class BankManagerMainPage {
+export class BankManagerMainPage extends BasePage {
   constructor(page) {
-    this.page = page;
+    super(page);
     this.addCustomerButton = page.getByRole('button', { name: 'Add Customer' });
     this.openAccountButton = page.getByRole('button', { name: 'Open Account' });
     this.customersButton = page.getByRole('button', { name: 'Customers' });
@@ -12,7 +13,6 @@ export class BankManagerMainPage {
     await expect(this.addCustomerButton).toBeVisible();
   }
 
-  // aliases used by tests
   async goToAddCustomer() {
     await this.addCustomerButton.click();
   }
