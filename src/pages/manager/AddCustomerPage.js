@@ -1,4 +1,4 @@
-import { BasePage } from '../BasePage.js';
+import { BasePage } from '../../BasePage.js';
 
 export class AddCustomerPage extends BasePage {
   constructor(page) {
