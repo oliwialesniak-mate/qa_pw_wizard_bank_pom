@@ -3,24 +3,25 @@ import { expect } from '@playwright/test';
 export class BankManagerMainPage {
   constructor(page) {
     this.page = page;
-    this.addCustomerButton = page.locator('button[ng-class="btnClass1"]');
-    this.openAccountButton = page.locator('button[ng-class="btnClass2"]');
-    this.customersButton = page.locator('button[ng-class="btnClass3"]');
+    this.addCustomerButton = page.getByRole('button', { name: 'Add Customer' });
+    this.openAccountButton = page.getByRole('button', { name: 'Open Account' });
+    this.customersButton = page.getByRole('button', { name: 'Customers' });
   }
 
   async assertManagerPageIsVisible() {
     await expect(this.addCustomerButton).toBeVisible();
   }
 
-  async openAddCustomerPage() {
+  // aliases used by tests
+  async goToAddCustomer() {
     await this.addCustomerButton.click();
   }
 
-  async openOpenAccountPage() {
+  async goToOpenAccount() {
     await this.openAccountButton.click();
   }
 
-  async openCustomersPage() {
+  async goToCustomers() {
     await this.customersButton.click();
   }
 }

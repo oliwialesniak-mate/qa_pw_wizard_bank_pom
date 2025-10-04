@@ -1,20 +1,19 @@
 export class BankHomePage {
   constructor(page) {
     this.page = page;
-    this.bankManagerLoginButton = page.locator('button[ng-click="manager()"]');
-    this.customerLoginButton = page.locator('button[ng-click="customer()"]');
-    this.homeButton = page.locator('.home'); // optional: the "Home" link
+    this.bankManagerLoginButton = page.getByRole('button', { name: 'Bank Manager Login' });
+    this.customerLoginButton = page.getByRole('button', { name: 'Customer Login' });
   }
 
   async open() {
     await this.page.goto('https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login');
   }
 
-  async clickBankManagerLogin() {
+  async clickBankManagerLoginButton() {
     await this.bankManagerLoginButton.click();
   }
 
-  async clickCustomerLogin() {
+  async clickCustomerLoginButton() {
     await this.customerLoginButton.click();
   }
 }

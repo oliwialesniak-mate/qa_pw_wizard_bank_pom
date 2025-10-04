@@ -3,9 +3,8 @@ import { expect } from '@playwright/test';
 export class CustomersListPage {
   constructor(page) {
     this.page = page;
-    this.searchInput = page.locator('input[placeholder="Search Customer"]');
-    this.customerRows = page.locator('tbody tr');
-    this.deleteButtons = page.locator('button[ng-click="deleteCust(cust)"]');
+    this.searchInput = page.getByPlaceholder('Search Customer');
+    this.customerRows = page.locator('table tbody tr');
   }
 
   async searchCustomer(term) {
@@ -16,13 +15,16 @@ export class CustomersListPage {
     await expect(this.customerRows).toHaveCount(1);
   }
 
-  async deleteFirstCustomer() {
-    await this.deleteButtons.first().click();
+  async assertCustomerExists(firstName, lastName) {
+    const row = this.page.locator('table tbody tr', { hasText: firstName });
+    await expect(row).toContainText(lastName);
   }
 
-  async getCustomerRowData() {
-    const cells = this.customerRows.first().locator('td');
-    const data = await cells.allTextContents();
-    return data.map((t) => t.trim());
+  async deleteCustomerByName(firstName) {
+    const deleteButton = this.page
+      .locator('table tbody tr', { hasText: firstName })
+      .getByRole('button', { name: 'Delete' });
+
+    await deleteButton.click();
   }
 }
