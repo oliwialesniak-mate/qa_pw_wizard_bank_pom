@@ -1,0 +1,22 @@
+export class BankHomePage {
+  constructor(page) {
+    this.page = page;
+    this.bankManagerLoginButton = page.getByRole('button', { name: 'Bank Manager Login' });
+    this.customerLoginButton = page.getByRole('button', { name: 'Customer Login' });
+  }
+
+  async open() {
+    await this.page.goto(
+      'https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login'
+    );
+  }
+
+  // ✅ Added to fix "is not a function" error
+  async clickBankManagerLoginButton() {
+    await this.bankManagerLoginButton.click();
+  }
+
+  async clickCustomerLoginButton() {
+    await this.customerLoginButton.click();
+  }
+}
